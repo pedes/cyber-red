@@ -1,0 +1,49 @@
+# CyberRed engagement scope (example). Only test systems you own or are explicitly authorized to test.
+# Create your own with:  cyberred init -t 10.10.11.0/24 -t target.htb --mode ctf
+engagement:
+  name: htb-practice-box
+  mode: ctf                      # lab | ctf | engagement
+  authorization: "Hack The Box lab, active subscription"   # required in 'engagement' mode
+  window:                        # optional; actions outside the window are blocked
+    start: 2026-11-15T09:00:00Z
+    end:   2026-11-15T21:00:00Z
+
+scope:
+  include:
+    - 10.10.11.0/24              # CIDR
+    - target.htb                 # hostname (must resolve to an in-scope address)
+    - http://target.htb:8080/    # URL (host + port + path prefix)
+  exclude:                       # exclusions always win
+    - 10.10.11.1                 # e.g. gateway / platform infrastructure
+  hosts:                         # optional static name -> IP map (like /etc/hosts); pins resolution
+    target.htb: 10.10.11.5
+
+policy:
+  allowed_tiers: [T0, T1, T2]    # T3 is never allowed
+  approvals:
+    T2: confirm                  # auto | confirm | deny   (engagement mode can only tighten these)
+  rate_limit:
+    max_packets_per_second: 500
+    max_http_requests_per_second: 20
+
+ctf:
+  flag_patterns:
+    - 'HTB\{[^}\s]{1,100}\}'
+    - '\b[a-f0-9]{32}\b'
+
+# The LLM is optional. Without this block, `cyberred run --autopilot` follows the built-in playbook.
+llm:
+  orchestrator:
+    provider: openai_compatible  # openai_compatible | anthropic
+    base_url: http://localhost:11434/v1   # e.g. Ollama; omit for api.openai.com
+    model: your-model-name
+    api_key_env: OPENAI_API_KEY  # NAME of the env var holding the key; never put keys in this file
+    native_tools: true           # set false for models without function calling (JSON protocol fallback)
+    context_window: 32000
+    price_in_per_mtok: 0         # optional: enables cost budgeting
+    price_out_per_mtok: 0
+
+budgets:
+  max_steps: 200
+  max_cost_usd: 5.00
+  max_duration_minutes: 180

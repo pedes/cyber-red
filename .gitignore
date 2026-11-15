@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Engagement data (never commit target data, findings, or logs)
+workspaces/
+engagements/
+*.db
+*.sqlite
+audit*.jsonl
+scope.yaml
+!examples/scope.example.yaml
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/

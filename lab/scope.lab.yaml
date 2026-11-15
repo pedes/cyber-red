@@ -1,0 +1,6 @@
+# Scope for the local practice lab started by lab/docker-compose.yml
+engagement: {name: local-lab, mode: lab}
+scope:
+  include:
+    - http://127.0.0.1:3000/
+    - http://127.0.0.1:8081/

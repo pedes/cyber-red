@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cyberred"
+version = "0.1.0.dev0"
+description = "Provider-agnostic offensive-security agent harness for labs, CTFs and authorized testing"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "rich>=13.7",
+  "typer>=0.12",
+  "pydantic>=2.6",
+  "pyyaml>=6.0",
+  "httpx>=0.27",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.5"]
+
+[project.scripts]
+cyberred = "cyberred.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cyberred"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 130
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E501", "E731", "B008", "UP007", "UP045"]
